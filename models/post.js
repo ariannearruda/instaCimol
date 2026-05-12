@@ -38,6 +38,16 @@ const postSchema = new mongoose.Schema({
     type: Date,
     default: Date.now
   }
+
+  media: {
+  type: String,
+  default: null
+},
+
+mediaType: {
+  type: String,
+  default: null
+},
 });
 
 module.exports = mongoose.model("Post", postSchema);

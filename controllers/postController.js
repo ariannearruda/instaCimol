@@ -8,7 +8,8 @@ exports.createPost = async (req, res) => {
     await Post.create({
       title,
       description: description || "",
-      image: req.file ? req.file.filename : null,
+      media: req.file ? req.file.filename : null,
+      mediaType: req.file ? req.file.mimetype : null, 
       userId: req.user.id,
       username: req.user.username, // 🔥 agora salva o nome também
       likes: 0,

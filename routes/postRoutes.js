@@ -8,7 +8,7 @@ const multer = require("multer");
 const upload = multer({ dest: "uploads/" });
 
 // posts
-router.post("/create", auth, upload.single("image"), postController.createPost);
+router.post("/create", auth, upload.single("media"), postController.createPost);
 
 // like
 router.post("/like/:id", auth, postController.likePost);

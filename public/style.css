@@ -209,6 +209,12 @@ a {
   animation: load 2s linear forwards;
 }
 
+.post-video {
+  width: 100%;
+  border-radius: 10px;
+  margin-bottom: 10px;
+}
+
 @keyframes load {
   from { width: 0%; }
   to { width: 100%; }

@@ -18,11 +18,11 @@
         placeholder="Descrição (opcional)"
       ></textarea>
 
-      <input 
+     <input 
         type="file" 
-        name="image" 
-        accept="image/*"
-      >
+        name="media" 
+        accept="image/*,video/*"
+     >
 
       <button type="submit">Postar</button>
 
@@ -40,9 +40,21 @@
 
         <h3><%= post.title %></h3>
 
-        <% if (post.image) { %>
-          <img src="/uploads/<%= post.image %>" alt="post image">
-        <% } %>
+        <% if (post.media) { %>
+
+  <% if (post.mediaType.startsWith("image")) { %>
+
+    <img src="/uploads/<%= post.media %>" alt="post">
+
+  <% } else if (post.mediaType.startsWith("video")) { %>
+
+    <video controls class="post-video">
+      <source src="/uploads/<%= post.media %>">
+    </video>
+
+  <% } %>
+
+<% } %>
 
         <% if (post.description) { %>
           <p><%= post.description %></p>
