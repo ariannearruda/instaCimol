@@ -1,6 +1,6 @@
 const Post = require("../models/Post");
 
-// CREATE
+
 exports.createPost = async (req, res) => {
   try {
     const { title, description } = req.body;
@@ -11,7 +11,7 @@ exports.createPost = async (req, res) => {
       media: req.file ? req.file.filename : null,
       mediaType: req.file ? req.file.mimetype : null, 
       userId: req.user.id,
-      username: req.user.username, // 🔥 agora salva o nome também
+      username: req.user.username, 
       likes: 0,
       comments: []
     });
@@ -22,7 +22,6 @@ exports.createPost = async (req, res) => {
   }
 };
 
-// LIKE
 exports.likePost = async (req, res) => {
   try {
     const post = await Post.findById(req.params.id);
@@ -39,7 +38,6 @@ exports.likePost = async (req, res) => {
   }
 };
 
-// COMMENT
 exports.commentPost = async (req, res) => {
   try {
     const { comment } = req.body;
@@ -49,7 +47,7 @@ exports.commentPost = async (req, res) => {
     if (!post) return res.redirect("/feed");
 
     post.comments.push({
-      user: req.user.username, // 🔥 SEM MAIS USER DO FORM
+      user: req.user.username, 
       text: comment
     });
 
@@ -61,7 +59,6 @@ exports.commentPost = async (req, res) => {
   }
 };
 
-// DELETE
 exports.deletePost = async (req, res) => {
   try {
     const post = await Post.findById(req.params.id);

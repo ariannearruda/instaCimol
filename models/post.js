@@ -22,10 +22,22 @@ const postSchema = new mongoose.Schema({
 
   image: {
     type: String,
-    required: true
+    default: null
+  },
+
+  media: {
+    type: String,
+    default: null
+  },
+
+  mediaType: {
+    type: String,
+    default: null
   },
 
   userId: String,
+
+  username: String,
 
   likes: {
     type: Number,
@@ -37,17 +49,7 @@ const postSchema = new mongoose.Schema({
   createdAt: {
     type: Date,
     default: Date.now
-  }
-
-  media: {
-  type: String,
-  default: null
-},
-
-mediaType: {
-  type: String,
-  default: null
-},
-});
+  } 
+}); 
 
 module.exports = mongoose.model("Post", postSchema);

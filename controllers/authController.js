@@ -2,7 +2,6 @@ const User = require("../models/User");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
-// REGISTER
 exports.register = async (req, res) => {
   try {
     const { name, email, password } = req.body;
@@ -34,7 +33,6 @@ exports.register = async (req, res) => {
   }
 };
 
-// LOGIN (CORRIGIDO SEM TIRAR O SEU MODELO)
 exports.login = async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -55,7 +53,7 @@ exports.login = async (req, res) => {
       return res.send("Senha inválida");
     }
 
-    // 🔥 IMPORTANTE: manter ID + username pro feed/comentários
+    
     const token = jwt.sign(
       {
         id: user._id,
@@ -75,7 +73,6 @@ exports.login = async (req, res) => {
   }
 };
 
-// LOGOUT
 exports.logout = (req, res) => {
   res.clearCookie("token");
   return res.redirect("/login");
