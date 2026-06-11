@@ -21,9 +21,10 @@ const postSchema = new mongoose.Schema({
   },
 
   image: {
-    type: String,
-    default: null
-  },
+  type: String,
+  required: false,
+  default: null
+},
 
   media: {
     type: String,
@@ -36,6 +37,7 @@ const postSchema = new mongoose.Schema({
   },
 
   userId: String,
+  username: String,
 
   username: String,
 
