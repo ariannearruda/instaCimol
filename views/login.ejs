@@ -1,0 +1,36 @@
+//login.ejs
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>Login</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+
+<body>
+
+  <div class="container">
+
+    <div class="form">
+
+      <h1 class="logo">Login</h1>
+
+      <form action="/auth/login" method="POST">
+
+        <input type="text" name="email" placeholder="Email" required>
+
+        <input type="password" name="password" placeholder="Senha" required>
+
+        <button type="submit">Entrar</button>
+
+      </form>
+
+      <a href="/register">Não tem conta? Criar</a>
+
+    </div>
+
+  </div>
+
+</body>
+</html>
