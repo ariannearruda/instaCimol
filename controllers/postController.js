@@ -1,5 +1,8 @@
+<<<<<<< HEAD
 //postController.js
 
+=======
+>>>>>>> 8453739ba698cce02a46d1af7502f2cc16f55cf6
 const Post = require("../models/Post");
 
 
