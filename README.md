@@ -72,31 +72,49 @@ API REST desenvolvida em Node.js, Express e MySQL como parte da migração do pr
 ```
 projeto/
 ├── config/
+│ ├── database.js
+│ └── db.js
 ├── controllers/
-│   ├── authController.js
-│   ├── categoriaController.js
-│   ├── clienteController.js
-│   ├── pedidoController.js
-│   └── produtoController.js
+│ ├── authController.js
+│ ├── categoriaController.js
+│ ├── clienteController.js
+│ ├── pedidoController.js
+│ ├── postController.js
+│ └── produtoController.js
 ├── middleware/
-│   └── auth.js
+│ └── auth.js
 ├── models/
-│   ├── usuarioModel.js
-│   ├── categoriaModel.js
-│   ├── clienteModel.js
-│   ├── produtoModel.js
-│   └── pedidoModel.js
-├── routes/
-│   ├── authRoutes.js
-│   ├── categoriaRoutes.js
-│   ├── clienteRoutes.js
-│   ├── produtoRoutes.js
-│   └── pedidoRoutes.js
+│ ├── categoriaModel.js
+│ ├── clienteModel.js
+│ ├── pedidoModel.js
+│ ├── post.js
+│ ├── produtoModel.js
+│ ├── user.js
+│ └── usuarioModel.js
 ├── public/
+│ ├── img/
+│ └── style.css
+├── routes/
+│ ├── authRoutes.js
+│ ├── categoriaRoutes.js
+│ ├── clienteRoutes.js
+│ ├── pedidoRoutes.js
+│ ├── postRoutes.js
+│ └── produtoRoutes.js
 ├── uploads/
+├── views/
+│ ├── partials/
+│ ├── choose.ejs
+│ ├── feed.ejs
+│ ├── home.ejs
+│ ├── login.ejs
+│ └── register.ejs
 ├── .env.example
+├── .gitignore
 ├── app.js
-└── package.json
+├── package-lock.json
+├── package.json
+└── README.md
 ```
 
 ---
