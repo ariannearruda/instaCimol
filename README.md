@@ -1,112 +1,185 @@
-# instaCimol
-instaCimol - Rede Social Simples
+# InstaCimol - Migração para API REST
 
-Sistema web de rede social desenvolvido para criação e interação entre usuários por meio de posts com imagens, curtidas e comentários.
+API REST desenvolvida em Node.js, Express e MySQL como parte da migração do projeto InstaCimol. A aplicação implementa autenticação com JWT e operações CRUD para gerenciamento de categorias, produtos, clientes e pedidos, utilizando documentação automática com Swagger.
 
-Tecnologias utilizadas
-Node.js
-Express
-MongoDB (Mongoose)
-EJS
-CSS
-JSON Web Token (JWT)
-Bcrypt
-Multer
-Dotenv
+## Tecnologias utilizadas
 
-Justificativa das tecnologias
-Express: framework leve e eficiente para criação de aplicações web
-MongoDB: banco de dados NoSQL flexível e adequado para dados não estruturados
-EJS: motor de templates para renderização no lado do servidor
-JWT: autenticação baseada em tokens sem necessidade de sessão no servidor
-Bcrypt: criptografia de senhas para maior segurança
-Multer: gerenciamento de upload de arquivos
-Dotenv: controle de variáveis de ambiente e segurança de dados sensíveis
+- Node.js
+- Express
+- MySQL
+- JWT (JSON Web Token)
+- Swagger (swagger-jsdoc e swagger-ui-express)
+- bcrypt
+- dotenv
+- cookie-parser
 
-Funcionalidades
-Cadastro de usuários
-Autenticação com login e senha
-Proteção de rotas privadas
-Criação de posts com imagens
-Sistema de curtidas
-Sistema de comentários
-Feed com ordenação por data
-Upload e exibição de imagens
+## Justificativa das tecnologias
 
-Estrutura do projeto
+- **Express:** framework para construção de APIs REST.
+- **MySQL:** banco de dados relacional para armazenamento estruturado.
+- **JWT:** autenticação baseada em tokens.
+- **Swagger:** documentação interativa da API.
+- **bcrypt:** criptografia das senhas dos usuários.
+- **dotenv:** gerenciamento de variáveis de ambiente.
+- **cookie-parser:** manipulação de cookies.
+
+---
+
+# Funcionalidades
+
+## Autenticação
+
+- Cadastro de usuários
+- Login com geração de token JWT
+- Proteção de rotas utilizando middleware de autenticação
+
+## Categorias
+
+- Listar categorias
+- Buscar categoria por ID
+- Criar categoria
+- Atualizar categoria
+- Excluir categoria
+
+## Produtos
+
+- Listar produtos
+- Buscar produto por ID
+- Criar produto
+- Atualizar produto
+- Excluir produto
+
+## Clientes
+
+- Listar clientes
+- Buscar cliente por ID
+- Criar cliente
+- Atualizar cliente
+- Excluir cliente
+
+## Pedidos
+
+- Listar pedidos
+- Buscar pedido por ID
+- Criar pedido
+- Atualizar pedido
+- Excluir pedido
+
+---
+
+# Estrutura do projeto
+
+```
 projeto/
 ├── config/
 ├── controllers/
 │   ├── authController.js
-│   └── postController.js
+│   ├── categoriaController.js
+│   ├── clienteController.js
+│   ├── pedidoController.js
+│   └── produtoController.js
 ├── middleware/
 │   └── auth.js
 ├── models/
-│   ├── User.js
-│   └── Post.js
+│   ├── usuarioModel.js
+│   ├── categoriaModel.js
+│   ├── clienteModel.js
+│   ├── produtoModel.js
+│   └── pedidoModel.js
 ├── routes/
 │   ├── authRoutes.js
-│   └── postRoutes.js
-├── views/
-│   ├── partials/
-│   ├── feed.ejs
-│   ├── login.ejs
-│   ├── register.ejs
-│   ├── home.ejs
-│   ├── choose.ejs
-│   └── loading.ejs
+│   ├── categoriaRoutes.js
+│   ├── clienteRoutes.js
+│   ├── produtoRoutes.js
+│   └── pedidoRoutes.js
 ├── public/
-│   ├── style.css
-│   └── img/
 ├── uploads/
-├── .env
 ├── .env.example
 ├── app.js
 └── package.json
+```
 
-Instalação
-Clonar o repositório
-Instalar dependências:
+---
+
+# Instalação
+
+Clone o repositório:
+
+```bash
+git clone https://github.com/ariannearruda/instaCimol.git
+```
+
+Instale as dependências:
+
+```bash
 npm install
-Criar arquivo .env com base no .env.example:
+```
+
+Crie um arquivo `.env` com base no `.env.example`:
+
+```env
 PORT=3000
-MONGO_URI=mongodb://localhost:27017/instacimol
+DB_HOST=localhost
+DB_USER=root
+DB_PASSWORD=sua_senha
+DB_NAME=loja
 JWT_SECRET=sua_chave_secreta
-Iniciar o projeto:
+```
+
+Inicie o servidor:
+
+```bash
 npm run dev
-Acessar no navegador:
-http://localhost:3000
+```
 
-Funcionamento do sistema
-Autenticação
-As senhas são criptografadas utilizando bcrypt
-Após login, um token JWT é gerado
-O token é armazenado em cookie
-Middleware valida o token para acesso a rotas protegidas
-Posts
-Cada post possui título, descrição e imagem
-Imagens são armazenadas via Multer
-O feed exibe posts ordenados por data de criação
-Usuários podem curtir e comentar posts
-Comentários são armazenados dentro do documento do post
+ou
 
-Segurança
-Criptografia de senhas com bcrypt
-Autenticação baseada em JWT
-Proteção de rotas privadas
-Variáveis sensíveis armazenadas no arquivo .env
-Observações
-O diretório uploads/ é necessário para armazenamento de imagens
-O arquivo .env não deve ser incluído no controle de versão
-O MongoDB deve estar em execução localmente
-Possíveis melhorias futuras
-Sistema de perfil de usuário
-Seguir e deixar de seguir usuários
-Sistema de mensagens
-Stories
-Melhor responsividade para dispositivos móveis
-Modo escuro
+```bash
+node app.js
+```
 
-Autor
+---
 
-Arianne
+# Documentação da API
+
+Após iniciar o servidor, acesse:
+
+```
+http://localhost:3000/api-docs
+```
+
+A documentação Swagger permite testar todos os endpoints diretamente pelo navegador.
+
+---
+
+# Segurança
+
+- Autenticação utilizando JWT.
+- Senhas criptografadas com bcrypt.
+- Rotas protegidas por middleware.
+- Variáveis sensíveis armazenadas em `.env`.
+
+---
+
+# Observações
+
+- O arquivo `.env` não deve ser enviado para o GitHub.
+- Utilize o arquivo `.env.example` como modelo.
+- É necessário possuir um servidor MySQL em execução.
+
+---
+
+# Possíveis melhorias futuras
+
+- Paginação nas consultas.
+- Filtros de pesquisa.
+- Upload de imagens para produtos.
+- Controle de permissões por usuário.
+- Testes automatizados.
+- Docker para facilitar a implantação.
+
+---
+
+# Autor
+
+Arianne Arruda
