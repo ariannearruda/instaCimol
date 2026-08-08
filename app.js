@@ -5,8 +5,8 @@ require("dotenv").config();
 
 const swaggerUi = require("swagger-ui-express");
 const swaggerJsdoc = require("swagger-jsdoc");
-
 const cookieParser = require("cookie-parser");
+const mongoose = require("mongoose");
 
 const app = express();
 
@@ -46,12 +46,28 @@ app.get("/api/status", (req, res) => {
   });
 });
 
+// Conexão MongoDB usada pela parte antiga da rede social
+if (process.env.MONGO_URI) {
+  mongoose
+    .connect(process.env.MONGO_URI)
+    .then(() => {
+      console.log("Mongo conectado");
+    })
+    .catch((err) => {
+      console.log("Erro ao conectar no Mongo:", err.message);
+    });
+}
+
+// Rotas da API MySQL
 app.use("/auth", require("./routes/authRoutes"));
 app.use("/categorias", require("./routes/categoriaRoutes"));
 app.use("/produtos", require("./routes/produtoRoutes"));
 app.use("/clientes", require("./routes/clienteRoutes"));
 app.use("/pedidos", require("./routes/pedidoRoutes"));
-// app.use("/posts", require("./routes/postRoutes"));
+
+// Rotas da rede social
+app.use("/posts", require("./routes/postRoutes"));
+
 app.get("/", (req, res) => {
   res.render("home");
 });
@@ -64,19 +80,24 @@ app.get("/register", (req, res) => {
   res.render("register");
 });
 
-/*
 const auth = require("./middleware/auth");
 
 app.get("/feed", auth, async (req, res) => {
-  const Post = require("./models/Post");
-  const posts = await Post.find().sort({ createdAt: -1 });
+  try {
+    const Post = require("./models/post");
 
-  res.render("feed", {
-    posts,
-    user: req.user
-  });
+    const posts = await Post.find().sort({ createdAt: -1 });
+
+    return res.render("feed", {
+      posts,
+      user: req.user
+    });
+  } catch (err) {
+    return res.status(500).json({
+      erro: err.message
+    });
+  }
 });
-*/
 
 const PORT = process.env.PORT || 3000;
 

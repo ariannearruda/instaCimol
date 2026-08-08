@@ -1,15 +1,78 @@
-<<<<<<< HEAD
 //authController.js
 
 const Usuario = require("../models/usuarioModel");
 const jwt = require("jsonwebtoken");
 const md5 = require("md5");
 
+exports.register = async (req, res) => {
+  try {
+    const { nome, nick, senha } = req.body;
+
+    const veioDoFormulario = req.is("application/x-www-form-urlencoded");
+
+    if (!nome || !nick || !senha) {
+      if (veioDoFormulario) {
+        return res
+          .status(400)
+          .send("Nome, nick e senha são obrigatórios.");
+      }
+
+      return res.status(400).json({
+        erro: "Nome, nick e senha são obrigatórios"
+      });
+    }
+
+    const existe = await Usuario.buscarPorNick(nick);
+
+    if (existe) {
+      if (veioDoFormulario) {
+        return res
+          .status(400)
+          .send("Esse nick já está cadastrado.");
+      }
+
+      return res.status(400).json({
+        erro: "Nick já cadastrado"
+      });
+    }
+
+    const id = await Usuario.criar({
+      nome,
+      nick,
+      senha: md5(senha)
+    });
+
+    // SITE
+    if (veioDoFormulario) {
+      return res.redirect("/login");
+    }
+
+    // SWAGGER / API
+    return res.status(201).json({
+      mensagem: "Usuário cadastrado com sucesso",
+      id_usuario: id
+    });
+
+  } catch (err) {
+    return res.status(500).json({
+      erro: err.message
+    });
+  }
+};
+
 exports.login = async (req, res) => {
   try {
     const { nick, senha } = req.body;
 
+    const veioDoFormulario = req.is("application/x-www-form-urlencoded");
+
     if (!nick || !senha) {
+      if (veioDoFormulario) {
+        return res
+          .status(400)
+          .send("Nick e senha são obrigatórios.");
+      }
+
       return res.status(400).json({
         erro: "Nick e senha são obrigatórios"
       });
@@ -18,13 +81,24 @@ exports.login = async (req, res) => {
     const usuario = await Usuario.buscarPorNick(nick);
 
     if (!usuario) {
+      if (veioDoFormulario) {
+        return res
+          .status(401)
+          .send("Usuário não encontrado.");
+      }
+
       return res.status(401).json({
         erro: "Usuário não encontrado"
       });
     }
 
-    // Aceita tanto senha em texto quanto hash MD5
     if (senha !== usuario.senha && md5(senha) !== usuario.senha) {
+      if (veioDoFormulario) {
+        return res
+          .status(401)
+          .send("Senha inválida.");
+      }
+
       return res.status(401).json({
         erro: "Senha inválida"
       });
@@ -41,6 +115,22 @@ exports.login = async (req, res) => {
       }
     );
 
+    // SITE
+    if (veioDoFormulario) {
+      res.cookie("token", token, {
+        httpOnly: true,
+        maxAge: 24 * 60 * 60 * 1000
+      });
+
+      res.cookie("id_usuario", usuario.id_usuario, {
+        httpOnly: true,
+        maxAge: 24 * 60 * 60 * 1000
+      });
+
+      return res.redirect("/feed");
+    }
+
+    // SWAGGER / API
     return res.status(200).json({
       mensagem: "Login realizado com sucesso",
       token,
@@ -58,94 +148,19 @@ exports.login = async (req, res) => {
   }
 };
 
-exports.register = async (req, res) => {
-  return res.status(501).json({
-    erro: "Cadastro não implementado nesta versão"
-  });
-};
-
 exports.logout = (req, res) => {
+  const veioDoNavegador =
+    req.headers.accept &&
+    req.headers.accept.includes("text/html");
+
+  res.clearCookie("token");
+  res.clearCookie("id_usuario");
+
+  if (veioDoNavegador) {
+    return res.redirect("/login");
+  }
+
   return res.status(200).json({
     mensagem: "Logout realizado"
   });
-=======
-const User = require("../models/User");
-const bcrypt = require("bcrypt");
-const jwt = require("jsonwebtoken");
-
-exports.register = async (req, res) => {
-  try {
-    const { name, email, password } = req.body;
-
-    if (!name || !email || !password) {
-      return res.send("Campos obrigatórios");
-    }
-
-    if (password.length < 8) {
-      return res.send("Senha mínima de 8 caracteres");
-    }
-
-    const exists = await User.findOne({ email });
-    if (exists) {
-      return res.send("Usuário já existe");
-    }
-
-    const hash = await bcrypt.hash(password, 10);
-
-    await User.create({
-      name,
-      email,
-      password: hash
-    });
-
-    return res.redirect("/login");
-  } catch (err) {
-    return res.status(500).json({ error: err.message });
-  }
-};
-
-exports.login = async (req, res) => {
-  try {
-    const { email, password } = req.body;
-
-    if (!email || !password) {
-      return res.send("Campos obrigatórios");
-    }
-
-    const user = await User.findOne({ email });
-
-    if (!user) {
-      return res.send("Usuário não encontrado");
-    }
-
-    const valid = await bcrypt.compare(password, user.password);
-
-    if (!valid) {
-      return res.send("Senha inválida");
-    }
-
-    
-    const token = jwt.sign(
-      {
-        id: user._id,
-        username: user.name
-      },
-      process.env.JWT_SECRET,
-      { expiresIn: "1d" }
-    );
-
-    res.cookie("token", token, {
-      httpOnly: true
-    });
-
-    return res.redirect("/feed");
-  } catch (err) {
-    return res.status(500).json({ error: err.message });
-  }
-};
-
-exports.logout = (req, res) => {
-  res.clearCookie("token");
-  return res.redirect("/login");
->>>>>>> 8453739ba698cce02a46d1af7502f2cc16f55cf6
 };

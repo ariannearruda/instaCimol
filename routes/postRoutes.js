@@ -1,8 +1,5 @@
-<<<<<<< HEAD
 //postRoutes.js
 
-=======
->>>>>>> 8453739ba698cce02a46d1af7502f2cc16f55cf6
 const express = require("express");
 const router = express.Router();
 
@@ -12,19 +9,6 @@ const auth = require("../middleware/auth");
 const multer = require("multer");
 const upload = multer({ dest: "uploads/" });
 
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
->>>>>>> 8453739ba698cce02a46d1af7502f2cc16f55cf6
-router.post("/create", auth, upload.single("media"), postController.createPost);
-
-router.post("/like/:id", auth, postController.likePost);
-
-router.post("/comment/:id", auth, postController.commentPost);
-
-<<<<<<< HEAD
-=======
-=======
 /**
  * @swagger
  * /posts/create:
@@ -48,12 +32,17 @@ router.post("/comment/:id", auth, postController.commentPost);
  *                 type: string
  *                 format: binary
  *     responses:
- *       201:
+ *       200:
  *         description: Post criado com sucesso
  *       400:
  *         description: Erro ao criar post
  */
-router.post("/create", auth, upload.single("media"), postController.createPost);
+router.post(
+  "/create",
+  auth,
+  upload.single("media"),
+  postController.createPost
+);
 
 /**
  * @swagger
@@ -128,8 +117,6 @@ router.post("/comment/:id", auth, postController.commentPost);
  *       404:
  *         description: Post não encontrado
  */
->>>>>>> e7a2026 (Adiciona documentacao Swagger)
->>>>>>> 8453739ba698cce02a46d1af7502f2cc16f55cf6
 router.post("/delete/:id", auth, postController.deletePost);
 
 module.exports = router;

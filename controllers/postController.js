@@ -1,10 +1,6 @@
-<<<<<<< HEAD
 //postController.js
 
-=======
->>>>>>> 8453739ba698cce02a46d1af7502f2cc16f55cf6
-const Post = require("../models/Post");
-
+const Post = require("../models/post");
 
 exports.createPost = async (req, res) => {
   try {
@@ -14,16 +10,18 @@ exports.createPost = async (req, res) => {
       title,
       description: description || "",
       media: req.file ? req.file.filename : null,
-      mediaType: req.file ? req.file.mimetype : null, 
-      userId: req.user.id,
-      username: req.user.username, 
+      mediaType: req.file ? req.file.mimetype : null,
+      userId: String(req.user.id_usuario),
+      username: req.user.nick,
       likes: 0,
       comments: []
     });
 
     return res.redirect("/feed");
   } catch (err) {
-    return res.status(500).json({ error: err.message });
+    return res.status(500).json({
+      error: err.message
+    });
   }
 };
 
@@ -31,7 +29,9 @@ exports.likePost = async (req, res) => {
   try {
     const post = await Post.findById(req.params.id);
 
-    if (!post) return res.redirect("/feed");
+    if (!post) {
+      return res.redirect("/feed");
+    }
 
     post.likes += 1;
 
@@ -39,7 +39,9 @@ exports.likePost = async (req, res) => {
 
     return res.redirect("/feed");
   } catch (err) {
-    return res.status(500).json({ error: err.message });
+    return res.status(500).json({
+      error: err.message
+    });
   }
 };
 
@@ -49,10 +51,12 @@ exports.commentPost = async (req, res) => {
 
     const post = await Post.findById(req.params.id);
 
-    if (!post) return res.redirect("/feed");
+    if (!post) {
+      return res.redirect("/feed");
+    }
 
     post.comments.push({
-      user: req.user.username, 
+      user: req.user.nick,
       text: comment
     });
 
@@ -60,7 +64,9 @@ exports.commentPost = async (req, res) => {
 
     return res.redirect("/feed");
   } catch (err) {
-    return res.status(500).json({ error: err.message });
+    return res.status(500).json({
+      error: err.message
+    });
   }
 };
 
@@ -68,16 +74,20 @@ exports.deletePost = async (req, res) => {
   try {
     const post = await Post.findById(req.params.id);
 
-    if (!post) return res.redirect("/feed");
+    if (!post) {
+      return res.redirect("/feed");
+    }
 
-    if (post.userId.toString() !== req.user.id) {
-      return res.send("Acesso negado");
+    if (String(post.userId) !== String(req.user.id_usuario)) {
+      return res.status(403).send("Acesso negado");
     }
 
     await Post.findByIdAndDelete(req.params.id);
 
     return res.redirect("/feed");
   } catch (err) {
-    return res.status(500).json({ error: err.message });
+    return res.status(500).json({
+      error: err.message
+    });
   }
 };

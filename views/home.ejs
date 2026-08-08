@@ -1,36 +1,22 @@
-//home.ejs
-
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
   <meta charset="UTF-8">
-  <title>Loading</title>
-    <link rel="stylesheet" href="/style.css">
+  <title>Home</title>
+  <link rel="stylesheet" href="/style.css">
 </head>
 
 <body>
 
-<main class="loading-screen">
+  <main class="container">
+    <div class="form">
+      <h1>Bem-vindo</h1>
 
-  <div class="loading-container">
+      <p>Login realizado com sucesso.</p>
 
-    <div class="loading-logo">
-      <img src="/img/logo.png" alt="Logo">
+      <a href="/api-docs">Abrir Swagger</a>
     </div>
-
-    <div class="loading-bar">
-      <div class="loading-progress"></div>
-    </div>
-
-  </div>
-
-</main>
-
-<script>
-  setTimeout(() => {
-    window.location.href = "/login";
-  }, 2000);
-</script>
+  </main>
 
 </body>
 </html>

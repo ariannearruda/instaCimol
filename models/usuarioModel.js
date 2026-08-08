@@ -1,3 +1,5 @@
+// usuarioModel.js
+
 const db = require("../config/database");
 
 exports.buscarPorNick = async (nick) => {
@@ -7,4 +9,13 @@ exports.buscarPorNick = async (nick) => {
   );
 
   return rows[0];
+};
+
+exports.criar = async (usuario) => {
+  const [result] = await db.query(
+    "INSERT INTO usuarios (nome, nick, senha) VALUES (?, ?, ?)",
+    [usuario.nome, usuario.nick, usuario.senha]
+  );
+
+  return result.insertId;
 };

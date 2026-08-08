@@ -1,8 +1,5 @@
-<<<<<<< HEAD
 //post.js
 
-=======
->>>>>>> 8453739ba698cce02a46d1af7502f2cc16f55cf6
 const mongoose = require("mongoose");
 
 const commentSchema = new mongoose.Schema({
@@ -26,10 +23,10 @@ const postSchema = new mongoose.Schema({
   },
 
   image: {
-  type: String,
-  required: false,
-  default: null
-},
+    type: String,
+    required: false,
+    default: null
+  },
 
   media: {
     type: String,
@@ -44,8 +41,6 @@ const postSchema = new mongoose.Schema({
   userId: String,
   username: String,
 
-  username: String,
-
   likes: {
     type: Number,
     default: 0
@@ -56,7 +51,7 @@ const postSchema = new mongoose.Schema({
   createdAt: {
     type: Date,
     default: Date.now
-  } 
-}); 
+  }
+});
 
 module.exports = mongoose.model("Post", postSchema);
