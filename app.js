@@ -17,6 +17,7 @@ const app = express();
 
 const allowedOrigins = [
   "http://localhost:3000",
+  process.env.API_URL,
   process.env.FRONTEND_URL
 ].filter(Boolean);
 
@@ -55,10 +56,9 @@ const swaggerOptions = {
     servers: [
       {
         url: process.env.API_URL || "http://localhost:3000",
-        description:
-          process.env.API_URL
-            ? "Servidor de produção"
-            : "Servidor local"
+        description: process.env.API_URL
+          ? "Servidor de produção"
+          : "Servidor local"
       }
     ]
   },
