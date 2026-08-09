@@ -1,36 +1,73 @@
-# InstaCimol - Migração para API REST
+# InstaCimol — API REST
 
-API REST desenvolvida em Node.js, Express e MySQL como parte da migração do projeto InstaCimol. A aplicação implementa autenticação com JWT e operações CRUD para gerenciamento de categorias, produtos, clientes e pedidos, utilizando documentação automática com Swagger.
+O **InstaCimol** foi originalmente desenvolvido como uma aplicação de rede social. Posteriormente, o projeto foi utilizado como base para atividades acadêmicas de **Banco de Dados e desenvolvimento de APIs REST**, incorporando uma nova estrutura baseada em Node.js, Express e MySQL.
 
-## Tecnologias utilizadas
+Nesta etapa, foram implementados autenticação com JWT, operações CRUD, rotas protegidas, documentação com Swagger, deploy da API e um cliente frontend separado para consumo dos endpoints.
+
+> **Observação:** entidades como produtos, categorias, clientes e pedidos fazem parte da atividade acadêmica de Banco de Dados e não pertencem ao conceito original da rede social InstaCimol.
+
+---
+
+## 🌐 Projeto em produção
+
+- **Frontend:** https://instacimol-frontend.vercel.app
+- **API:** https://instacimol.onrender.com
+- **Documentação Swagger:** https://instacimol.onrender.com/api-docs
+
+O frontend está hospedado na **Vercel** e consome a API REST hospedada no **Render**. O banco de dados MySQL utilizado pela API está hospedado no **Aiven**.
+
+---
+
+## 🛠️ Tecnologias utilizadas
+
+### Backend
 
 - Node.js
 - Express
 - MySQL
 - JWT (JSON Web Token)
-- Swagger (swagger-jsdoc e swagger-ui-express)
 - bcrypt
 - dotenv
 - cookie-parser
+- CORS
+- Swagger (`swagger-jsdoc` e `swagger-ui-express`)
 
-## Justificativa das tecnologias
+### Frontend
 
-- **Express:** framework para construção de APIs REST.
-- **MySQL:** banco de dados relacional para armazenamento estruturado.
-- **JWT:** autenticação baseada em tokens.
-- **Swagger:** documentação interativa da API.
-- **bcrypt:** criptografia das senhas dos usuários.
-- **dotenv:** gerenciamento de variáveis de ambiente.
-- **cookie-parser:** manipulação de cookies.
+- HTML
+- CSS
+- JavaScript
+- Fetch API
+
+### Deploy e infraestrutura
+
+- Render — hospedagem da API
+- Vercel — hospedagem do frontend
+- Aiven — hospedagem do banco de dados MySQL
+- GitHub — versionamento do código
 
 ---
 
-# Funcionalidades
+## 💡 Justificativa das tecnologias
+
+- **Express:** framework utilizado para construção da API REST e gerenciamento das rotas.
+- **MySQL:** banco de dados relacional utilizado para armazenamento estruturado dos dados.
+- **JWT:** utilizado para autenticação baseada em tokens e proteção dos endpoints.
+- **Swagger:** fornece documentação interativa e permite testar os endpoints da API.
+- **bcrypt:** utilizado para armazenamento seguro das senhas através de hash.
+- **dotenv:** permite separar configurações e informações sensíveis do código-fonte.
+- **CORS:** controla quais origens podem realizar requisições para a API.
+- **Fetch API:** utilizada pelo frontend para realizar requisições HTTP para a API REST.
+
+---
+
+# ⚙️ Funcionalidades
 
 ## Autenticação
 
 - Cadastro de usuários
-- Login com geração de token JWT
+- Login
+- Geração de token JWT
 - Proteção de rotas utilizando middleware de autenticação
 
 ## Categorias
@@ -65,50 +102,67 @@ API REST desenvolvida em Node.js, Express e MySQL como parte da migração do pr
 - Atualizar pedido
 - Excluir pedido
 
+## Cliente frontend
+
+Foi desenvolvido um frontend separado para demonstrar o consumo da API REST.
+
+A interface permite:
+
+- realizar login utilizando a API;
+- receber e armazenar o token JWT;
+- realizar requisições autenticadas;
+- consultar os produtos cadastrados no banco de dados;
+- exibir dinamicamente os dados retornados pela API.
+
 ---
 
-# Estrutura do projeto
+# 🔐 Autenticação e rotas protegidas
 
+Após realizar login, a API retorna um token JWT.
+
+Esse token deve ser enviado nas requisições para endpoints protegidos através do cabeçalho:
+
+```http
+Authorization: Bearer TOKEN
 ```
-projeto/
+
+O middleware de autenticação verifica o token antes de permitir o acesso à rota solicitada.
+
+---
+
+# 📁 Estrutura do backend
+
+```text
+instaCimol/
 ├── config/
-│ ├── database.js
-│ └── db.js
+│   ├── database.js
+│   └── db.js
 ├── controllers/
-│ ├── authController.js
-│ ├── categoriaController.js
-│ ├── clienteController.js
-│ ├── pedidoController.js
-│ ├── postController.js
-│ └── produtoController.js
+│   ├── authController.js
+│   ├── categoriaController.js
+│   ├── clienteController.js
+│   ├── pedidoController.js
+│   ├── postController.js
+│   └── produtoController.js
 ├── middleware/
-│ └── auth.js
+│   └── auth.js
 ├── models/
-│ ├── categoriaModel.js
-│ ├── clienteModel.js
-│ ├── pedidoModel.js
-│ ├── post.js
-│ ├── produtoModel.js
-│ ├── user.js
-│ └── usuarioModel.js
+│   ├── categoriaModel.js
+│   ├── clienteModel.js
+│   ├── pedidoModel.js
+│   ├── post.js
+│   ├── produtoModel.js
+│   ├── user.js
+│   └── usuarioModel.js
 ├── public/
-│ ├── img/
-│ └── style.css
 ├── routes/
-│ ├── authRoutes.js
-│ ├── categoriaRoutes.js
-│ ├── clienteRoutes.js
-│ ├── pedidoRoutes.js
-│ ├── postRoutes.js
-│ └── produtoRoutes.js
-├── uploads/
+│   ├── authRoutes.js
+│   ├── categoriaRoutes.js
+│   ├── clienteRoutes.js
+│   ├── pedidoRoutes.js
+│   ├── postRoutes.js
+│   └── produtoRoutes.js
 ├── views/
-│ ├── partials/
-│ ├── choose.ejs
-│ ├── feed.ejs
-│ ├── home.ejs
-│ ├── login.ejs
-│ └── register.ejs
 ├── .env.example
 ├── .gitignore
 ├── app.js
@@ -117,9 +171,11 @@ projeto/
 └── README.md
 ```
 
+O cliente frontend é mantido separadamente no repositório `instacimol-frontend`.
+
 ---
 
-# Instalação
+# 💻 Instalação local
 
 Clone o repositório:
 
@@ -127,7 +183,7 @@ Clone o repositório:
 git clone https://github.com/ariannearruda/instaCimol.git
 ```
 
-Instale as dependências:
+Entre na pasta do projeto e instale as dependências:
 
 ```bash
 npm install
@@ -137,20 +193,26 @@ Crie um arquivo `.env` com base no `.env.example`:
 
 ```env
 PORT=3000
+
 DB_HOST=localhost
 DB_USER=root
 DB_PASSWORD=sua_senha
 DB_NAME=loja
+DB_PORT=3306
+
 JWT_SECRET=sua_chave_secreta
+
+API_URL=http://localhost:3000
+FRONTEND_URL=http://127.0.0.1:5500
 ```
 
-Inicie o servidor:
+Depois, inicie o servidor:
 
 ```bash
 npm run dev
 ```
 
-ou
+ou:
 
 ```bash
 node app.js
@@ -158,46 +220,81 @@ node app.js
 
 ---
 
-# Documentação da API
+# 📚 Documentação da API
 
-Após iniciar o servidor, acesse:
+Com o servidor executando localmente, a documentação Swagger pode ser acessada em:
 
-```
+```text
 http://localhost:3000/api-docs
 ```
 
-A documentação Swagger permite testar todos os endpoints diretamente pelo navegador.
+Em produção:
+
+```text
+https://instacimol.onrender.com/api-docs
+```
+
+A interface Swagger permite visualizar e testar os endpoints disponíveis.
 
 ---
 
-# Segurança
+# 🚀 Deploy
 
-- Autenticação utilizando JWT.
-- Senhas criptografadas com bcrypt.
-- Rotas protegidas por middleware.
-- Variáveis sensíveis armazenadas em `.env`.
+A aplicação utiliza uma arquitetura com serviços separados:
+
+```text
+Frontend (Vercel)
+        ↓
+   requisições HTTP
+        ↓
+API REST (Render)
+        ↓
+     MySQL
+        ↓
+     Aiven
+```
+
+O CORS da API é configurado para permitir requisições provenientes do frontend autorizado.
+
+As configurações de produção são armazenadas como variáveis de ambiente no serviço de hospedagem, evitando a exposição de credenciais no código-fonte.
 
 ---
 
-# Observações
+# 🔒 Segurança
+
+Foram implementadas medidas como:
+
+- autenticação utilizando JWT;
+- hash de senhas com bcrypt;
+- middleware para proteção de rotas;
+- Prepared Statements nas operações com o banco de dados;
+- controle de origem das requisições através de CORS;
+- credenciais e chaves armazenadas em variáveis de ambiente;
+- arquivo `.env` ignorado pelo Git.
+
+---
+
+# 📝 Observações
 
 - O arquivo `.env` não deve ser enviado para o GitHub.
-- Utilize o arquivo `.env.example` como modelo.
-- É necessário possuir um servidor MySQL em execução.
+- O arquivo `.env.example` serve como modelo de configuração.
+- Para execução local, é necessário configurar uma instância MySQL compatível.
+- A versão em produção utiliza banco de dados remoto.
+- Por utilizar serviços gratuitos de hospedagem, a primeira requisição à API pode apresentar um tempo maior de resposta após períodos de inatividade.
 
 ---
 
-# Possíveis melhorias futuras
+# 🔮 Possíveis melhorias futuras
 
-- Paginação nas consultas.
-- Filtros de pesquisa.
-- Upload de imagens para produtos.
-- Controle de permissões por usuário.
-- Testes automatizados.
-- Docker para facilitar a implantação.
+- Paginação das consultas
+- Filtros de pesquisa
+- Upload de imagens para produtos
+- Controle de permissões por usuário
+- Testes automatizados
+- Docker para facilitar a implantação
 
 ---
 
-# Autor
+# 👩‍💻 Autora
 
-Arianne Arruda
+**Arianne Arruda**
