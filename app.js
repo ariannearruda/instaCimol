@@ -1,4 +1,4 @@
-//app.js
+// app.js
 
 const express = require("express");
 require("dotenv").config();
@@ -7,37 +7,94 @@ const swaggerUi = require("swagger-ui-express");
 const swaggerJsdoc = require("swagger-jsdoc");
 const cookieParser = require("cookie-parser");
 const mongoose = require("mongoose");
+const cors = require("cors");
 
 const app = express();
+
+/* =========================
+   CORS
+========================= */
+
+const allowedOrigins = [
+  "http://localhost:3000",
+  process.env.FRONTEND_URL
+].filter(Boolean);
+
+app.use(
+  cors({
+    origin: (origin, callback) => {
+      // Permite chamadas sem origin, como Swagger/Postman
+      if (!origin) {
+        return callback(null, true);
+      }
+
+      if (allowedOrigins.includes(origin)) {
+        return callback(null, true);
+      }
+
+      return callback(new Error("Origem não permitida pelo CORS"));
+    },
+    credentials: true
+  })
+);
+
+/* =========================
+   SWAGGER
+========================= */
 
 const swaggerOptions = {
   definition: {
     openapi: "3.0.0",
+
     info: {
-      title: "loja API",
+      title: "InstaCimol API",
       version: "2.0.0",
-      description: "Documentação da API da loja"
+      description: "Documentação da API REST do projeto InstaCimol"
     },
+
     servers: [
       {
-        url: "http://localhost:3000"
+        url: process.env.API_URL || "http://localhost:3000",
+        description:
+          process.env.API_URL
+            ? "Servidor de produção"
+            : "Servidor local"
       }
     ]
   },
+
   apis: ["./routes/*.js"]
 };
 
 const swaggerSpec = swaggerJsdoc(swaggerOptions);
 
+/* =========================
+   MIDDLEWARES
+========================= */
+
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+
 app.use(express.static("public"));
 app.use("/uploads", express.static("uploads"));
+
 app.use(cookieParser());
 
 app.set("view engine", "ejs");
 
-app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+/* =========================
+   SWAGGER
+========================= */
+
+app.use(
+  "/api-docs",
+  swaggerUi.serve,
+  swaggerUi.setup(swaggerSpec)
+);
+
+/* =========================
+   STATUS DA API
+========================= */
 
 app.get("/api/status", (req, res) => {
   res.json({
@@ -46,7 +103,11 @@ app.get("/api/status", (req, res) => {
   });
 });
 
-// Conexão MongoDB usada pela parte antiga da rede social
+/* =========================
+   MONGODB
+   Parte antiga da rede social
+========================= */
+
 if (process.env.MONGO_URI) {
   mongoose
     .connect(process.env.MONGO_URI)
@@ -54,19 +115,54 @@ if (process.env.MONGO_URI) {
       console.log("Mongo conectado");
     })
     .catch((err) => {
-      console.log("Erro ao conectar no Mongo:", err.message);
+      console.log(
+        "Erro ao conectar no Mongo:",
+        err.message
+      );
     });
 }
 
-// Rotas da API MySQL
-app.use("/auth", require("./routes/authRoutes"));
-app.use("/categorias", require("./routes/categoriaRoutes"));
-app.use("/produtos", require("./routes/produtoRoutes"));
-app.use("/clientes", require("./routes/clienteRoutes"));
-app.use("/pedidos", require("./routes/pedidoRoutes"));
+/* =========================
+   ROTAS DA API MYSQL
+========================= */
 
-// Rotas da rede social
-app.use("/posts", require("./routes/postRoutes"));
+app.use(
+  "/auth",
+  require("./routes/authRoutes")
+);
+
+app.use(
+  "/categorias",
+  require("./routes/categoriaRoutes")
+);
+
+app.use(
+  "/produtos",
+  require("./routes/produtoRoutes")
+);
+
+app.use(
+  "/clientes",
+  require("./routes/clienteRoutes")
+);
+
+app.use(
+  "/pedidos",
+  require("./routes/pedidoRoutes")
+);
+
+/* =========================
+   ROTAS DA REDE SOCIAL
+========================= */
+
+app.use(
+  "/posts",
+  require("./routes/postRoutes")
+);
+
+/* =========================
+   VIEWS
+========================= */
 
 app.get("/", (req, res) => {
   res.render("home");
@@ -80,13 +176,19 @@ app.get("/register", (req, res) => {
   res.render("register");
 });
 
+/* =========================
+   FEED
+========================= */
+
 const auth = require("./middleware/auth");
 
 app.get("/feed", auth, async (req, res) => {
   try {
     const Post = require("./models/post");
 
-    const posts = await Post.find().sort({ createdAt: -1 });
+    const posts = await Post.find().sort({
+      createdAt: -1
+    });
 
     return res.render("feed", {
       posts,
@@ -99,8 +201,12 @@ app.get("/feed", auth, async (req, res) => {
   }
 });
 
+/* =========================
+   SERVIDOR
+========================= */
+
 const PORT = process.env.PORT || 3000;
 
-app.listen(PORT, () => {
+app.listen(PORT, "0.0.0.0", () => {
   console.log(`Servidor rodando em http://localhost:${PORT}`);
 });
